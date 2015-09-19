@@ -189,9 +189,9 @@ public class MainActivity extends FragmentActivity implements
                 sendBroadcast(mediaScanIntent);
             }
 
-            /*Intent recipientsIntent = new Intent(this, RecipientsActivity.class);
+            Intent recipientsIntent = new Intent(this, RecipientsActivity.class);
             recipientsIntent.setData(mMediaUri);
-            startActivity(recipientsIntent);*/
+            startActivity(recipientsIntent);
 
         }
         else if (resultCode != RESULT_CANCELED) {
