@@ -191,6 +191,13 @@ public class MainActivity extends FragmentActivity implements
 
             Intent recipientsIntent = new Intent(this, RecipientsActivity.class);
             recipientsIntent.setData(mMediaUri);
+
+            String fileType = "image";
+            if (requestCode == PICK_PHOTO_REQUEST) {
+                fileType = ParseConstants.TYPE_IMAGE;
+            }
+
+            recipientsIntent.putExtra(ParseConstants.KEY_FILE_TYPE, fileType);
             startActivity(recipientsIntent);
 
         }
