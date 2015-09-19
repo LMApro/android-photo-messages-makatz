@@ -1,5 +1,8 @@
 package com.group05.photomessage;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -35,7 +38,13 @@ public class MainActivity extends FragmentActivity implements
     public static final String TAG = MainActivity.class.getSimpleName();
     public static final int TAKE_PHOTO_REQUEST = 0;
     public static final int PICK_PHOTO_REQUEST = 1;
-    public static final int MEDIA_TYPE_IMAGE = 2;
+    public static final int TAKE_VIDEO_REQUEST = 2;
+    public static final int PICK_VIDEO_REQUEST = 3;
+    public static final int MEDIA_TYPE_IMAGE = 4;
+    public static final int MEDIA_TYPE_VIDEO = 5;
+
+    public static final int FILE_SIZE_LIMIT = 1024*1024*10;
+
 
     protected Uri mMediaUri;
 
@@ -60,6 +69,27 @@ public class MainActivity extends FragmentActivity implements
                     Intent choosePhotoIntent = new Intent(Intent.ACTION_GET_CONTENT);
                     choosePhotoIntent.setType("image/*");
                     startActivityForResult(choosePhotoIntent, PICK_PHOTO_REQUEST);
+                    break;
+                case 2: // take video
+                    /*Intent videoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+                    mMediaUri = getOutputMediaFileUri(MEDIA_TYPE_VIDEO);
+                    if (mMediaUri == null) {
+                        // display an error
+                        Toast.makeText(MainActivity.this, R.string.error_external_storage,
+                                Toast.LENGTH_LONG).show();
+                    }
+                    else {
+                        videoIntent.putExtra(MediaStore.EXTRA_OUTPUT, mMediaUri);
+                        videoIntent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 10);
+                        videoIntent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 0); // 0 = lowest res
+                        startActivityForResult(videoIntent, TAKE_VIDEO_REQUEST);
+                    }*/
+                    break;
+                case 3: // choose video
+//                    Intent chooseVideoIntent = new Intent(Intent.ACTION_GET_CONTENT);
+//                    chooseVideoIntent.setType("video/*");
+//                    Toast.makeText(MainActivity.this, R.string.video_file_size_warning, Toast.LENGTH_LONG).show();
+//                    startActivityForResult(chooseVideoIntent, PICK_VIDEO_REQUEST);
                     break;
 
             }
@@ -92,7 +122,9 @@ public class MainActivity extends FragmentActivity implements
             if (mediaType == MEDIA_TYPE_IMAGE) {
                 mediaFile = new File(path + "IMG_" + timestamp + ".jpg");
             }
-
+            /*else if (mediaType == MEDIA_TYPE_VIDEO) {
+                mediaFile = new File(path + "VID_" + timestamp + ".mp4");
+            }*/
             else {
                 return null;
             }
@@ -175,13 +207,42 @@ public class MainActivity extends FragmentActivity implements
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK) {
-            if (requestCode == PICK_PHOTO_REQUEST) {
+            if (requestCode == PICK_PHOTO_REQUEST || requestCode == PICK_VIDEO_REQUEST) {
                 if (data == null) {
                     Toast.makeText(this, getString(R.string.general_error), Toast.LENGTH_LONG).show();
                 } else {
                     mMediaUri = data.getData();
                 }
                 Log.i(TAG, "Media URI: " + mMediaUri);
+
+                /*if (requestCode == PICK_VIDEO_REQUEST) {
+                    // make sure the file is less than 10 MB
+                    int fileSize = 0;
+                    InputStream inputStream = null;
+
+                    try {
+                        inputStream = getContentResolver().openInputStream(mMediaUri);
+                        fileSize = inputStream.available();
+                    }
+                    catch (FileNotFoundException e) {
+                        Toast.makeText(this, R.string.error_opening_file, Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    catch (IOException e) {
+                        Toast.makeText(this, R.string.error_opening_file, Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    finally {
+                        try {
+                            inputStream.close();
+                        } catch (IOException e) { *//* Intentionally blank *//* }
+                    }
+
+                    if (fileSize >= FILE_SIZE_LIMIT) {
+                        Toast.makeText(this, R.string.error_file_size_too_large, Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                }*/
             } else {
                 Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
                 mediaScanIntent.setData(mMediaUri);
@@ -191,9 +252,12 @@ public class MainActivity extends FragmentActivity implements
             Intent recipientsIntent = new Intent(this, RecipientsActivity.class);
             recipientsIntent.setData(mMediaUri);
 
-            String fileType = "image";
-            if (requestCode == PICK_PHOTO_REQUEST) {
+            String fileType;
+            if (requestCode == PICK_PHOTO_REQUEST || requestCode == TAKE_PHOTO_REQUEST) {
                 fileType = ParseConstants.TYPE_IMAGE;
+            }
+            else {
+                fileType = ParseConstants.TYPE_VIDEO;
             }
 
             recipientsIntent.putExtra(ParseConstants.KEY_FILE_TYPE, fileType);
