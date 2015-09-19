@@ -23,12 +23,11 @@ import com.parse.SaveCallback;
 
 public class EditFriendsActivity extends ListActivity {
 
-    protected ParseRelation<ParseUser> mFriendsRelation;
-    protected ParseUser mCurrentUser;
-
     public static final String TAG = EditFriendsActivity.class.getSimpleName();
 
     protected List<ParseUser> mUsers;
+    protected ParseRelation<ParseUser> mFriendsRelation;
+    protected ParseUser mCurrentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
