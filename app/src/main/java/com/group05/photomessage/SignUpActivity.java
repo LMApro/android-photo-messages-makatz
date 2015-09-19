@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -24,6 +25,7 @@ public class SignUpActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_sign_up);
         mUsername = (EditText)findViewById(R.id.usernameField);
         mPassword = (EditText)findViewById(R.id.passwordField);
@@ -50,7 +52,7 @@ public class SignUpActivity extends ActionBarActivity {
                     AlertDialog dialog = builder.create();
                     dialog.show();
                 } else {
-
+                    setProgressBarIndeterminateVisibility(true);
 
                     ParseUser user = new ParseUser();
 
@@ -61,8 +63,7 @@ public class SignUpActivity extends ActionBarActivity {
                     user.signUpInBackground(new SignUpCallback() {
                         @Override
                         public void done(ParseException e) {
-
-
+                            setProgressBarIndeterminateVisibility(false);
                             if (e == null) {
                                 Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
