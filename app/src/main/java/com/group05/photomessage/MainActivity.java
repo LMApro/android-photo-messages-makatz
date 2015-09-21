@@ -38,12 +38,12 @@ public class MainActivity extends FragmentActivity implements
     public static final String TAG = MainActivity.class.getSimpleName();
     public static final int TAKE_PHOTO_REQUEST = 0;
     public static final int PICK_PHOTO_REQUEST = 1;
-    public static final int TAKE_VIDEO_REQUEST = 2;
-    public static final int PICK_VIDEO_REQUEST = 3;
+//    public static final int TAKE_VIDEO_REQUEST = 2;
+//    public static final int PICK_VIDEO_REQUEST = 3;
     public static final int MEDIA_TYPE_IMAGE = 4;
-    public static final int MEDIA_TYPE_VIDEO = 5;
+//    public static final int MEDIA_TYPE_VIDEO = 5;
 
-    public static final int FILE_SIZE_LIMIT = 1024*1024*10;
+//    public static final int FILE_SIZE_LIMIT = 1024*1024*10;
 
 
     protected Uri mMediaUri;
@@ -207,7 +207,7 @@ public class MainActivity extends FragmentActivity implements
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK) {
-            if (requestCode == PICK_PHOTO_REQUEST || requestCode == PICK_VIDEO_REQUEST) {
+            if (requestCode == PICK_PHOTO_REQUEST) {
                 if (data == null) {
                     Toast.makeText(this, getString(R.string.general_error), Toast.LENGTH_LONG).show();
                 } else {
@@ -235,7 +235,7 @@ public class MainActivity extends FragmentActivity implements
                     finally {
                         try {
                             inputStream.close();
-                        } catch (IOException e) { *//* Intentionally blank *//* }
+                        } catch (IOException e) {  *//*Intentionally blank *//* }
                     }
 
                     if (fileSize >= FILE_SIZE_LIMIT) {
@@ -252,13 +252,13 @@ public class MainActivity extends FragmentActivity implements
             Intent recipientsIntent = new Intent(this, RecipientsActivity.class);
             recipientsIntent.setData(mMediaUri);
 
-            String fileType;
+            String fileType = "media";
             if (requestCode == PICK_PHOTO_REQUEST || requestCode == TAKE_PHOTO_REQUEST) {
                 fileType = ParseConstants.TYPE_IMAGE;
             }
-            else {
+            /*else {
                 fileType = ParseConstants.TYPE_VIDEO;
-            }
+            }*/
 
             recipientsIntent.putExtra(ParseConstants.KEY_FILE_TYPE, fileType);
             startActivity(recipientsIntent);
