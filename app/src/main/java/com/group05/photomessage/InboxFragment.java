@@ -54,8 +54,16 @@ public class InboxFragment extends ListFragment {
                         i++;
                     }
 
-                    MessageAdapter adapter = new MessageAdapter(getListView().getContext(), mMessages);
-                    setListAdapter(adapter);
+                    if (getListView().getAdapter() == null) {
+                        // update adapter
+                        MessageAdapter adapter = new MessageAdapter(getListView().getContext(), mMessages);
+                        setListAdapter(adapter);
+                    } else {
+                        // refill adapter
+                        ((MessageAdapter)getListView().getAdapter()).refill(mMessages);
+                    }
+
+
                 }
             }
         });
