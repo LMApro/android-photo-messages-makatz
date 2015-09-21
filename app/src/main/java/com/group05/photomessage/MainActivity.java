@@ -288,21 +288,20 @@ public class MainActivity extends FragmentActivity implements
         int id = item.getItemId();
 
         switch (id) {
-            case R.id.action_logout: {
+            case R.id.action_logout:
                 ParseUser.logOut();
                 navigateToLogin();
-            }
-            case R.id.action_edit_friends: {
+                break;
+            case R.id.action_edit_friends:
                 Intent intent = new Intent(this, EditFriendsActivity.class);
                 startActivity(intent);
-            }
-            case R.id.action_camera: {
+                break;
+            case R.id.action_camera:
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setItems(R.array.camera_choices, mDialogListener);
                 AlertDialog dialog = builder.create();
                 dialog.show();
-            }
-
+                break;
         }
 
         return super.onOptionsItemSelected(item);
